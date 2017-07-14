@@ -10,16 +10,20 @@ public class Main {
 		public String name;
 		public long length;
 	}
+
+	final static short BAR_MAX_LENGTH = 32;
 	
 	public static void main(String[] args) {
 		if (args.length == 0)
 			System.out.println("Use path to analyze as program parameter");
 		else
-			printTree(new File(args[0]));
+			for (int i = 0; i < args.length; i++)
+				printTree(new File(args[i]));
 	}
 
 	public static void printTree(File victim){
 		if (!victim.exists()) return;
+		System.out.println("\n\n" + victim.getAbsolutePath() + "\n" + repeatChar(54 + BAR_MAX_LENGTH, '_'));
 		
 		Entry[] list = new Entry[victim.listFiles().length];
 		long sumtotal = 0;
@@ -35,7 +39,7 @@ public class Main {
 		final long st = sumtotal;
 		Arrays.sort(list, new Comparator<Entry>(){
 			public int compare(Entry a, Entry b){
-				return (int)((b.length - a.length)/(float)st*100000);
+				return (int)((b.length - a.length) / (float)st * 100000);
 			}
 		});
 		
@@ -55,12 +59,11 @@ public class Main {
 	}
 	
 	public static String generateBar(double victim){
-		final short BAR_MAX_LENGTH = 32;
 		short barlength = (short)Math.round(BAR_MAX_LENGTH * victim);
-		return "[" + repeatChar(barlength, '█') + repeatChar((short)(BAR_MAX_LENGTH - barlength), ' ') + "]";
+		return "[" + repeatChar(barlength, '█') + repeatChar((short)(BAR_MAX_LENGTH - barlength), '-') + "]";
 	}
 	
-	public static String repeatChar(short len, char ch){
+	public static String repeatChar(int len, char ch){
 		String goddamn = "";
 		for (short i = 0; i < len; i++)
 			goddamn += ch;
